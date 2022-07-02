@@ -7,7 +7,7 @@ const { IamAuthenticator } = require('ibm-watson/auth');
 const app = express();
 app.use(bodyParser.json());
 
-const port = 3333;
+const port = process.env.PORT || 5000;
 
 const assistant = new AssistantV2({
     version: '2021-11-27',
