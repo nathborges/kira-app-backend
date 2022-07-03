@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const AssistantV2 = require('ibm-watson/assistant/v2');
 const { IamAuthenticator } = require('ibm-watson/auth');
 const cors = require('cors');
+app.use(cors());
+app.options('*', cors());
 
 const app = express();
 app.use(bodyParser.json());
