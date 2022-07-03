@@ -3,8 +3,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const AssistantV2 = require('ibm-watson/assistant/v2');
 const { IamAuthenticator } = require('ibm-watson/auth');
+const cors = require('cors');
 
 const app = express();
+app.use(cors()); 
 app.use(bodyParser.json());
 
 const port = process.env.PORT || 5000;
