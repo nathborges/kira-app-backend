@@ -6,10 +6,9 @@ const { IamAuthenticator } = require('ibm-watson/auth');
 const cors = require('cors');
 
 const app = express();
-app.use(cors()); 
 app.use(bodyParser.json());
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3030;
 
 const assistant = new AssistantV2({
     version: '2021-11-27',
@@ -51,13 +50,14 @@ app.post('/message', async function(req, res) {
             var returnObject = null;
             if (err) {
                 console.error(JSON.stringify(err, null, 2));
-                returnObject = res.status(err.code || 500).json(err);
+                return res.status(err.code || 500).json(err);
             } else {
                 returnObject = res.json(data);
             }
             
             return returnObject;
         }).catch((err) => {
+            console.error(JSON.stringify(err, null, 2));
             return res.status(err.status).json({"message": err.message}); 
         });
 
@@ -88,6 +88,7 @@ app.delete('/delete-session', async function(req, res) {
             
             return returnObject;
         }).catch((err) => {
+            console.error(JSON.stringify(err, null, 2));
             var err = {
                 message: "Sessão não existe",
             }
@@ -98,4 +99,21 @@ app.delete('/delete-session', async function(req, res) {
     }
 });
 
+process.on('uncaughtException', (error, origin) => {
+    console.log('----- Uncaught exception -----')
+    console.log(error)
+    console.log('----- Exception origin -----')
+    console.log(origin)
+})
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.log('----- Unhandled Rejection at -----')
+    console.log(promise)
+    console.log('----- Reason -----')
+    console.log(reason)
+})
+
 app.listen(port, () => console.log(`Running on port ${port}`));
+setInterval(() => {
+    console.log('App still running')
+}, 1000);
